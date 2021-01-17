@@ -1,0 +1,7 @@
+### pronus mobile
+@host1 = https://reportmobile.docs.apiary.io/#
+@host2 = https://report-mobile.probussystem.com
+
+### LOGIN
+
+POST {{host2}}/api/login
