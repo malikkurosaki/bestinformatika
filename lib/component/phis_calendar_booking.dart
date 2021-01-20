@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,61 +10,180 @@ class PhisCalendarBooking extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        key: CalendarCtrl.scaffoldKey,
-        floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            CalendarCtrl.scaffoldKey.currentState.openDrawer();
-          },
-          child: Text("ini ada dimana"),
-        ),
-        drawer: Drawer(),
         body: SafeArea(
-          child: Container(
-            child: Column(
+          child: GetX(
+            initState: CalendarCtrl.init(),
+            builder: (controller) => CalendarCtrl.loading.value?Text("loading ..."):
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BackButton(),
-                Flexible(
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.cyan[800],
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: AssetImage('assets/images/plan.png',)
+                    )
+                  ),
+                  width: double.infinity,
+                  padding: EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Obx(
-                        () => Text(CalendarCtrl.lsBulan[CalendarCtrl.bulan.value].toString().toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 24
-                          ),
-                        )
+                      Row(
+                        children: [
+                          BackButton(),
+                          Text("Calendar Booking Report",
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.yellow
+                            ),
+                          )
+                        ],
                       ),
-                      Flexible(
-                        child: Container(
-                          color: Colors.red,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: List.generate(CalendarCtrl.hari.length, (index) => 
-                                  Expanded(
-                                    child: Container(
-                                      padding: EdgeInsets.all(8),
-                                      child: Text(CalendarCtrl.hari[index].toString().toUpperCase(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    )
-                                  )
-                                ),
-                              ),
-                              Flexible(
-                                child: SetahunView()
-                              ),
-                            ],
-                          ),
+                      Text(CalendarCtrl.tahun.value.toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      Text(CalendarCtrl.bulanan[CalendarCtrl.bulan.value - 1].toString().toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 18
                         ),
                       ),
                     ],
-                  )
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  color: Colors.cyan,
+                  child: Row(
+                    children: List.generate(CalendarCtrl.hari.length, (index) => 
+                      Expanded(
+                        child: Center(
+                          child: Text(CalendarCtrl.hari[index].toString().substring(0,3),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.cyan[800],
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        )
+                      )
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: PageView.builder(
+                    onPageChanged: (value) => CalendarCtrl.halaman.value = value,
+                    controller: CalendarCtrl.pageController,
+                    itemCount: CalendarCtrl.kalender.length,
+                    itemBuilder: (context, index) => 
+                    Column(
+                      children: [
+                        Container(
+                          color: Colors.blueGrey,
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            children: List.generate(CalendarCtrl.kalender[index].length, (i1) => 
+                              Expanded(
+                                child: Center(
+                                  child: Text(CalendarCtrl.kalender[index][i1]['value'].toString(),
+                                    style: TextStyle(
+                                      color: CalendarCtrl.kalender[index][i1]['type'] == 1?Colors.white: Colors.blueGrey[400],
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                )
+                              )
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: Listener(
+                            onPointerDown: (event) => CalendarCtrl.kemana.value = 0,
+                            onPointerUp: (event) => CalendarCtrl.onUp(),
+                            onPointerMove: (event) {
+                              if(event.delta.dx > 6) CalendarCtrl.kemana.value = 1;
+                              if(event.delta.dx < -6) CalendarCtrl.kemana.value = 2;
+                            },
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: List.generate(CalendarCtrl.lsRoomType.length, (i2) => 
+                                  Card(
+                                    child: Container(
+                                      width: double.infinity,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: double.infinity,
+                                            child: Row(
+                                              children: [
+                                                Card(
+                                                  color: Colors.blueGrey,
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(8),
+                                                    child: Center(
+                                                      child: Icon(Icons.roofing,
+                                                        color: Colors.white,
+                                                      )
+                                                    )
+                                                  )
+                                                ),
+                                                Spacer(),
+                                                Text(CalendarCtrl.lsRoomType[i2]['nm_jenis'],
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: List.generate(CalendarCtrl.lsRoomType[i2]['rooms'].length, (i3) => 
+                                              Row(
+                                                children: [
+                                                  Card(
+                                                    color: Colors.grey,
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(8),
+                                                      child: Center(
+                                                        child: Text(CalendarCtrl.lsRoomType[i2]['rooms'][i3]['no_room'].toString())
+                                                      )
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Row(
+                                                      children: List.generate(CalendarCtrl.kalender[index].length, (i4) => 
+                                                        Expanded(
+                                                          child: Center(
+                                                            child: Text(CalendarCtrl.kalender[index][i4]['value'].toString())
+                                                          )
+                                                        )
+                                                      ),
+                                                    )
+                                                  )
+                                                ],
+                                              )
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]
+                    )
+                  ),
                 )
               ],
             ),
@@ -74,153 +195,117 @@ class PhisCalendarBooking extends StatelessWidget {
 }
 
 
-class SetahunView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: GetX(
-        initState: (_) => CalendarCtrl.init(),
-        builder: (controller) => CalendarCtrl.lsCalendar.isEmpty? Text('loading ...'):
-        PageView(
-          onPageChanged: (value) => CalendarCtrl.bulan.value = value,
-          controller: CalendarCtrl.controller1,
-          pageSnapping: true,
-          physics: ScrollPhysics(),
-          children: List.generate(CalendarCtrl.lsCalendar.length, (index) => 
-            PageView(
-              controller: CalendarCtrl.controller2,
-              pageSnapping: true,
-              physics: ScrollPhysics(),
-              children: List.generate(CalendarCtrl.lsCalendar[index]['week'].length, (idx) => 
-                Listener(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 1),
-                        color: Colors.white,
-                        padding: EdgeInsets.all(8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(CalendarCtrl.lsCalendar[index]['week'][idx].length, (i) => 
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                child: Text(CalendarCtrl.lsCalendar[index]['week'][idx][i]['value'].toString(),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: CalendarCtrl.lsCalendar[index]['week'][idx][i]['type'] == 0? Colors.grey: Colors.black
-                                  ),
-                                ),
-                              )
-                            )
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        child: Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.all(8),
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: Text("ini ada dimana")
-                        ),
-                      )
-                    ],
-                  ),
-                  onPointerMove: (event) {
-
-                    if(event.delta.dx > 6 && idx == 0){
-                      CalendarCtrl.controller1.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeInToLinear);
-                      
-                    }
-
-                    if(event.delta.dx < -6 && idx == CalendarCtrl.lsCalendar[index]['week'].length - 1){
-                      CalendarCtrl.controller1.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeInToLinear);
-                      
-                    }
-                  },
-                  
-                )
-              ).toList(),
-            )
-          ).toList(),
-        )
-      )
-    );
-  }
-}
-
-class RoomTypeView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Scaffold.of(context).openDrawer();
-      },
-      child: Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(right: 1, top: 1),
-        child: GetX(
-          initState: (state) => CalendarCtrl.initRoomType(),
-          builder: (controller) => ListView(
-            children: List.generate(CalendarCtrl.lsRoomType.length, (index) => 
-              ExpansionTile(
-                title: Text(CalendarCtrl.lsRoomType[index]['nm_jenis'].toString().toLowerCase(),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12
-                  ),
-                ),
-                children: List.generate(CalendarCtrl.lsRoomType[index]['rooms'].length, (idx) => 
-                  Text(CalendarCtrl.lsRoomType[index]['rooms'][idx]['nama_room'].toString(),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                ).toList(),
-              )
-            ).toList(),
-          ),
-        )
-      ),
-    );
-  }
-}
-
 class CalendarCtrl extends PhisCtrl{
-  static final lsCalendar = [].obs;
+
+  static final bulanan = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+  static final hari = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  static final pekanan = ["1st", "2nd", "3rd", "4th", "5th", "6ix"];
+  static final loading = false.obs;
+  static final pageController = PageController();
+  static final kalender = [].obs;
+  static final lsEvent = [].obs;
   static final lsRoomType = [].obs;
+
+  static final tahun = 2021.obs;
   static final bulan = 1.obs;
-  static final controller1 = PageController();
-  static final controller2 = PageController();
-  static final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  static final hari = ["min", "sen", "sel", "rab", "kam", "jum", "sab"];
-  static final lsBulan = ["January", "February", "Mart", "April", "May", "June", "july", "August", "September", "October", "Noverber", "Desember"];
-
-  static init()async{
-    final List data = Penanggalan.setahun;
-    lsCalendar.assignAll(data);
-  }
-
+  static final halaman = 0.obs;
+  static final kemana = 0.obs;
   
 
-  static initRoomType(){
-    final data = DataEvent.roomType;
-    lsRoomType.assignAll(data['data']['data']);
+  static init(){
+    loading.value = true;
+    //kalender.assignAll(Penanggalan.sebulan(tahun.value, bulan.value)['week']);
+    initAssyncCalendar();
+    iniAssyncRoomType();
+    //initlistEvent();
+    
+    loading.value = false;
   }
 
+  static initAssyncCalendar(){
+    kalender.assignAll(Penanggalan.sebulan(tahun.value, bulan.value)['week']);
+  }
+
+  static iniAssyncRoomType(){
+    final rtp = FakeApi.roomType;
+    lsRoomType.assignAll(rtp['data']['data']);
+  }
+
+  static List tanggalRange(String checkIn, String checout) => List.generate(DateTime.parse(checout).difference(DateTime.parse(checkIn)).inDays + 1, (index) => DateTime(DateTime.parse(checkIn).year, DateTime.parse(checkIn).month, DateTime.parse(checkIn).day + (index)));
+
+  static initlistEvent(){
+    //lsEvent.assignAll();
+    final List evn = FakeApi.dataEvent['data']['data'];
+    final ijc = evn.map((e) => 
+      {
+        "check_in": e['checkIn'],
+        "check_out": e['checkOut'],
+        "index_awal": getPekan(e['checkIn']),
+        "index_akhir": getPekan(e['checkOut']),
+        "room_id": e['roomId'],
+        "tahun_awal": DateTime.parse(e['checkIn']).year,
+        "tahun_akhir": DateTime.parse(e['checkOut']).year,
+        "bulan_awal": DateTime.parse(e['checkIn']).month,
+        "bulan_akhir": DateTime.parse(e['checkOut']).month,
+        "tanggal_awal": DateTime.parse(e['checkIn']).day,
+        "warna": e['backgroundColor'].toString().replaceAll("#", "x0ff"),
+        "tanggal_akhir": DateTime.parse(e['checkOut']).day,
+        "rage": tanggalRange(e['checkIn'], e['checkOut'])
+      }
+    ).toList();
+
+  }
+
+  static getPekan(String calendar) {
+    final cld = DateTime.parse(calendar);
+    final lsCalendar = Penanggalan.sebulan(cld.year, cld.month)['week'];
+    final lsMap = lsCalendar.map((e) => e.where( (e) => e["type"] != 0 && e["type"] != 2).toList().map( (e) => e['value']).toList()).toList();
+    final idx = lsMap.map( (e) => e.indexOf(cld.day)).toList().indexWhere((element) => element != -1);
+    return idx;
+  }
+  
+
+  static onUp(){
+    initlistEvent();
+    if(kemana.value == 1 && halaman.value == 0){
+      bulan.value --;
+      initAssyncCalendar();
+      pageController.jumpToPage(kalender.length -1);
+      if(bulan.value <= 0) {
+        bulan.value = 12;
+        tahun.value --;
+      }
+      print("kurangi");
+    }
+
+    if(kemana.value == 2 && halaman.value == (kalender.length - 1)){
+      bulan.value ++;
+      initAssyncCalendar();
+      pageController.jumpToPage(0);
+      if(bulan.value > 12) {
+        bulan.value = 1;
+        tahun.value ++;
+      }
+      print("bertambah");
+    }
+
+  }
 }
 
+
+
 class Penanggalan{
-  static final setahun = List.generate(12, (index) => sebulan(2021, index + 1));
-  static sebulan(int tahun, int bulan){
+
+  static Map sebulan(int tahun, int bulan){
     final tanggal = DateTime(tahun, bulan);
     final minggu = tanggal.weekday;
     final totalHari = DateTime(tahun, bulan + 1, 0).day;
+
     var date = 1;
     var bulanan = {};
-    var harian = [];
     bulanan['month'] = bulan;
     bulanan['week'] = [];
+    bulanan['day'] = [];
     for(var j = 0; j < ((minggu + totalHari) / 7).ceil(); j++) {
       bulanan['week'].add([]);
       int awal = tanggal.subtract(Duration(days: tanggal.weekday )).day;
@@ -246,22 +331,19 @@ class Penanggalan{
               "value": akhir ++
             };
           }
+          bulanan['day'].add(isi);
           bulanan['week'][j].add(isi);
-          harian.add(isi);
       }
-      
     }
-    bulanan['harian'] = harian;
     return bulanan;
   }
 }
 
 
+// /// contoh respon api event
+class FakeApi {
 
-
-
-class DataEvent {
-  static final Map roomType = {
+  static Map roomType = {
   "response": 200,
   "message": "Room Type List",
   "status": true,
@@ -595,7 +677,7 @@ class DataEvent {
   }
 };
 
-  static final Map response = {
+  static final Map dataEvent = {
   "response": 200,
   "message": "Room Available",
   "status": true,

@@ -42,7 +42,7 @@ class PrestoSalesPerformance extends StatelessWidget {
                           child: Container(
                             width: double.infinity,
                             child: Center(
-                              child: Text(SalesPerformanceCtrl.bulan[SalesPerformanceCtrl.lsSales[i]['month']-1].toUpperCase(),
+                              child: Text(SalesPerformanceCtrl.bulan[SalesPerformanceCtrl.lsSales[i]['month'] -1 ].toString().toUpperCase(),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.orange[100]

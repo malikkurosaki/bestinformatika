@@ -34,14 +34,69 @@ void main() {
         "guestName": s['guestName'],
         "backgroundColor": s['backgroundColor'],
         "range": Percobaan.getListRange(Percobaan.getTanggal(s['checkIn']), Percobaan.getTanggal(s['checkOut'])),
-        "tahun": Percobaan.getTahun(s['checkIn']),
-        "bulan": Percobaan.getBulan(s['checkIn'])
-
+        "tahun_awal": Percobaan.getTahun(s['checkIn']),
+        "tahun_akhir": Percobaan.getTahun(s['checkOut']),
+        "bulan_awal": Percobaan.getBulan(s['checkIn']),
+        "bulan_akhir": Percobaan.getBulan(s['checkOut']),
+        "tanggal_awal": Percobaan.getTanggal(s['checkIn']),
+        "tanggal_akhir": Percobaan.getTanggal(s['checkOut']),
+        "minggu_awal": Percobaan.getPekan(s['checkIn']),
+        "minggu_akhir": Percobaan.getPekan(s['checkOut'])
       }).toList()
     }
   ).toList()}).toList();
 
-  Percobaan.sebulan(2020, 12);
+  final lsEvent = Percobaan.getEvent(FakeData.roomType['data']['data'], FakeData.response['data']['data']);
+  final sebulan = Percobaan.sebulan(2020, 12);
+
+  final List aya = Ini.hitung("2021-01-01");
+
+  final itu = aya.fold([[]], (list, x) => list.last.length == 7? (list..add([x])) : (list..last.add(x)));
+  //print(JsonEncoder.withIndent(" ").convert(itu));
+  final myfiled = {"IDAufgaben": "2630", "Aufgabe": "erste Aufgabe"};
+  print(JsonEncoder.withIndent(" ").convert(myfiled));
+}
+
+class Ini {
+  static hitung(String kalender){
+    final tanggalan = DateTime.parse(kalender);
+    final tahun = tanggalan.year;
+    final bulan = tanggalan.month;
+    final pekan = tanggalan.weekday;
+    final totalHari = DateTime(tahun, bulan + 1, 0).day;
+
+    var tanggal = 1;
+    final hasil = [];
+
+    for(var i = 0; i < ((pekan + totalHari) / 7).ceil(); i++){
+      var tmp = {};
+      var awal = tanggalan.subtract(Duration(days: pekan)).day;
+      var akhir = 1;
+      for( var x = 0; x < 7; x++){
+        if(x == 0 && i < pekan){
+          tmp = {
+            "type": 0,
+            "value": awal ++
+          };
+        }
+        else if(totalHari >= tanggal){
+          tmp = {
+            "type": 1,
+            "value": tanggal
+          };
+          tanggal ++;
+        }
+        else if(tanggal > totalHari){
+          tmp = {
+            "type": 2,
+            "value": akhir ++
+          };
+        }
+        hasil.add(tmp);
+      }
+    }
+    return hasil;
+  }
 }
 
 class Percobaan{
@@ -56,9 +111,28 @@ class Percobaan{
     }).toList();
   }
 
+  // mendapatkan tahun
   static getTahun(String calendar) => DateTime.parse(calendar).year;
+  // mendapatkakn bulan 
   static getBulan(String calendar) => DateTime.parse(calendar).month;
+  // mendapatkan tanggal bulan target
   static getTanggal(String calendar) => DateTime.parse(calendar).day;
+  // mendapatkan index sepekan mbulan target
+  static getPekan(String calendar) {
+    final cld = DateTime.parse(calendar);
+    final lsCalendar = sebulan(cld.year, cld.month)['week'];
+    final lsMap = lsCalendar.map((e) => e.where( (e) => e["type"] != 0 && e["type"] != 2).toList().map( (e) => e['value']).toList()).toList();
+    final idx = lsMap.map( (e) => e.indexOf(cld.day)).toList().indexWhere((element) => element != -1);
+    return idx;
+  }
+
+  static getTotalHari(String calendar) => DateTime(DateTime.parse(calendar).year, DateTime.parse(calendar).month + 1, 0).day;
+
+  static getTotalPekan(String calendar){
+    final cal = DateTime.parse(calendar);
+    final pkn = cal.weekday;
+    return ((pkn + getTotalHari(calendar)) / 7).ceil();
+  }
 
   static getEvent(List roomType, List event){
     final eventKamar = roomType.map((e) => 
@@ -75,10 +149,19 @@ class Percobaan{
             "checkOut": s['checkOut'],
             "guestName": s['guestName'],
             "backgroundColor": s['backgroundColor'],
-            "range": Percobaan.getListRange(Percobaan.getTanggal(s['checkIn']), Percobaan.getTanggal(s['checkOut'])),
-            "tahun": Percobaan.getTahun(s['checkIn']),
-            "bulan": Percobaan.getBulan(s['checkIn'])
-
+            "range": getListRange(getTanggal(s['checkIn']), getTanggal(s['checkOut'])),
+            "tahun_awal": getTahun(s['checkIn']),
+            "tahun_akhir": getTahun(s['checkOut']),
+            "bulan_awal": getBulan(s['checkIn']),
+            "bulan_akhir": getBulan(s['checkOut']),
+            "tanggal_awal": getTanggal(s['checkIn']),
+            "tanggal_akhir": getTanggal(s['checkOut']),
+            "minggu_awal": getPekan(s['checkIn']),
+            "minggu_akhir": getPekan(s['checkOut']),
+            "total_hari_awal": getTotalHari(s['checkIn']),
+            "total_hari_akhir": getTotalHari(s['checkOut']),
+            "total_pekan_awal": getTotalPekan(s['checkIn']),
+            "total_pekan_akhir": getTotalPekan(s['checkOut']),
           }).toList()
         }
       ).toList()
@@ -89,8 +172,6 @@ class Percobaan{
 
   static Map sebulan(int tahun, int bulan){
 
-    final lsEvent = getEvent(FakeData.roomType['data']['data'], FakeData.response['data']['data']);
-
     final tanggal = DateTime(tahun, bulan);
     final minggu = tanggal.weekday;
     final totalHari = DateTime(tahun, bulan + 1, 0).day;
@@ -99,6 +180,7 @@ class Percobaan{
     var bulanan = {};
     bulanan['month'] = bulan;
     bulanan['week'] = [];
+    bulanan['day'] = [];
     for(var j = 0; j < ((minggu + totalHari) / 7).ceil(); j++) {
       bulanan['week'].add([]);
       int awal = tanggal.subtract(Duration(days: tanggal.weekday )).day;
@@ -124,11 +206,10 @@ class Percobaan{
               "value": akhir ++
             };
           }
-
+          bulanan['day'].add(isi);
           bulanan['week'][j].add(isi);
       }
     }
-    print(JsonEncoder.withIndent(" ").convert(lsEvent.map((e) => "apa").toList()));
     return bulanan;
   }
 }
