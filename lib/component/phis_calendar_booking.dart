@@ -1,5 +1,5 @@
+
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +68,7 @@ class PhisCalendarBooking extends StatelessWidget {
                       Card(
                         color: Colors.cyan[300],
                         child: Container(
+                          width: 100,
                           padding: EdgeInsets.all(8),
                           child: Icon(Icons.calendar_view_day),
                         ),
@@ -104,9 +105,11 @@ class PhisCalendarBooking extends StatelessWidget {
                           color: Colors.blueGrey,
                           child: Row(
                             children: [
+                              /// calendar angka
                               Card(
                                 color: Colors.blueGrey[300],
                                 child: Container(
+                                  width: 100,
                                   padding: EdgeInsets.all(8),
                                   child: Icon(Icons.calendar_today)
                                 ),
@@ -181,9 +184,11 @@ class PhisCalendarBooking extends StatelessWidget {
                                           children: List.generate(CalendarCtrl.lsRoomType[i2]['rooms'].length, (i3) => 
                                             Row(
                                               children: [
+                                                /// nomer room
                                                 Card(
                                                   color: Colors.grey[300],
                                                   child: Container(
+                                                    width: 100,
                                                     padding: EdgeInsets.all(8),
                                                     child: Center(
                                                       child: Text(CalendarCtrl.lsRoomType[i2]['rooms'][i3]['no_room'].toString())
@@ -318,10 +323,10 @@ class CalendarCtrl extends PhisCtrl{
   static List tanggalRange(String checkIn, String checout) => List.generate(DateTime.parse(checout).difference(DateTime.parse(checkIn)).inDays + 1, (index) => DateTime(DateTime.parse(checkIn).year, DateTime.parse(checkIn).month, DateTime.parse(checkIn).day + (index)).day);
 
   static initlistEvent()async{
-    // Response res = await ControllerApi.to.calendarBooking();
-    // Get.dialog(Card(child: SingleChildScrollView(child: Text(res.body),),));
-
-    final data = FakeApi.dataEvent['data']['data'];
+    Response res = await ControllerApi.to.calendarBooking();
+    Get.dialog(Card(child: SingleChildScrollView(child: Text(JsonEncoder.withIndent(" ").convert(res.body).toString()),)));
+    final data = res.body['data']['data'];
+    /// final data = FakeApi.dataEvent['data']['data'];
     final ijc = data.map((e) => 
       {
         "check_in": e['checkIn'],
@@ -372,7 +377,6 @@ class CalendarCtrl extends PhisCtrl{
   
 
   static onUp(){
-    initlistEvent();
     if(kemana.value == 1 && halaman.value == 0){
       bulan.value --;
       initAssyncCalendar();
@@ -391,6 +395,8 @@ class CalendarCtrl extends PhisCtrl{
       if(bulan.value > 12) {
         bulan.value = 1;
         tahun.value ++;
+        // init event
+        initlistEvent();
       }
       print("bertambah");
     }

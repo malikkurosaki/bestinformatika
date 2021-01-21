@@ -50,8 +50,9 @@ class ControllerApi extends GetConnect{
   Future prestoDailyRevenue(String date) async => get("$host/api/dailyRevenueReport?outlet=${GetStorage().read('id').toString()}&date=$date",headers: {"Authorization": "Bearer "+GetStorage().read("token")});
   Future prestoProductSalesReport(String date, String type) async => get("$host/api/productSalesReport?outlet=${GetStorage().read('id').toString()}&date=&type=$type",headers: {"Authorization": "Bearer "+GetStorage().read("token")});
 
-  // calendar booking /listBooking?start=&end=&roomType=&roomFilter=
-  Future calendarBooking() async => get("$host/api/listBooking?start=&end=&roomType=&roomFilter=",headers: {"Authorization": "Bearer "+GetStorage().read("token")});
+  /// calendar booking /listBooking?start=&end=&roomType=&roomFilter=
+  /// https://report-mobile.probussystem.com/api/listBooking?start=&end=&roomType=&roomFilter=
+  Future calendarBooking() async => get("$host/api/listBooking?start=&end=&roomType=&roomFilter=&outlet=${GetStorage().read('id').toString()}",headers: {"Authorization": "Bearer "+GetStorage().read("token")});
   // room type  => /api/roomType?outlet=
   Future calendarRoomType() async => get("$host/api/roomType?outlet=${GetStorage().read('id').toString()}",headers: {"Authorization": "Bearer "+GetStorage().read("token")});
 
