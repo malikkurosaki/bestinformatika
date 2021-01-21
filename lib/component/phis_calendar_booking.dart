@@ -1,13 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:probus_mobile/controllers/controller_api.dart';
 import 'package:probus_mobile/controllers/phis_ctrl.dart';
 
 class PhisCalendarBooking extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
+
     return Container(
       child: Scaffold(
         body: SafeArea(
@@ -59,19 +64,32 @@ class PhisCalendarBooking extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 8),
                   color: Colors.cyan,
                   child: Row(
-                    children: List.generate(CalendarCtrl.hari.length, (index) => 
+                    children: [
+                      Card(
+                        color: Colors.cyan[300],
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.calendar_view_day),
+                        ),
+                      ),
                       Expanded(
-                        child: Center(
-                          child: Text(CalendarCtrl.hari[index].toString().substring(0,3),
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.cyan[800],
-                              fontWeight: FontWeight.bold
-                            ),
+                        child: Row(
+                          children: List.generate(CalendarCtrl.hari.length, (index) => 
+                            Expanded(
+                              child: Center(
+                                child: Text(CalendarCtrl.hari[index].toString().substring(0,3),
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.cyan[800],
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              )
+                            )
                           ),
-                        )
-                      )
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Flexible(
@@ -84,21 +102,33 @@ class PhisCalendarBooking extends StatelessWidget {
                       children: [
                         Container(
                           color: Colors.blueGrey,
-                          padding: EdgeInsets.symmetric(vertical: 8),
                           child: Row(
-                            children: List.generate(CalendarCtrl.kalender[index].length, (i1) => 
+                            children: [
+                              Card(
+                                color: Colors.blueGrey[300],
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Icon(Icons.calendar_today)
+                                ),
+                              ),
                               Expanded(
-                                child: Center(
-                                  child: Text(CalendarCtrl.kalender[index][i1]['value'].toString(),
-                                    style: TextStyle(
-                                      color: CalendarCtrl.kalender[index][i1]['type'] == 1?Colors.white: Colors.blueGrey[400],
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold
-                                    ),
+                                child: Row(
+                                  children: List.generate(CalendarCtrl.kalender[index].length, (i1) => 
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(CalendarCtrl.kalender[index][i1]['value'].toString(),
+                                          style: TextStyle(
+                                            color: CalendarCtrl.kalender[index][i1]['type'] == 1?Colors.white: Colors.blueGrey[400],
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+                                      )
+                                    )
                                   ),
-                                )
-                              )
-                            ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Flexible(
@@ -112,68 +142,115 @@ class PhisCalendarBooking extends StatelessWidget {
                             child: SingleChildScrollView(
                               child: Column(
                                 children: List.generate(CalendarCtrl.lsRoomType.length, (i2) => 
-                                  Card(
-                                    child: Container(
-                                      width: double.infinity,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: double.infinity,
-                                            child: Row(
-                                              children: [
-                                                Card(
-                                                  color: Colors.blueGrey,
-                                                  child: Container(
-                                                    padding: EdgeInsets.all(8),
-                                                    child: Center(
-                                                      child: Icon(Icons.roofing,
-                                                        color: Colors.white,
-                                                      )
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 8),
+                                    color: Colors.grey[200],
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          child: Row(
+                                            children: [
+                                              Card(
+                                                color: Colors.cyan,
+                                                child: Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: Center(
+                                                    child: Icon(Icons.roofing,
+                                                      color: Colors.white,
                                                     )
                                                   )
-                                                ),
-                                                Spacer(),
-                                                Text(CalendarCtrl.lsRoomType[i2]['nm_jenis'],
+                                                )
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                                child: Text(CalendarCtrl.lsRoomType[i2]['nm_jenis'],
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: List.generate(CalendarCtrl.lsRoomType[i2]['rooms'].length, (i3) => 
-                                              Row(
-                                                children: [
-                                                  Card(
-                                                    color: Colors.grey,
-                                                    child: Container(
-                                                      padding: EdgeInsets.all(8),
-                                                      child: Center(
-                                                        child: Text(CalendarCtrl.lsRoomType[i2]['rooms'][i3]['no_room'].toString())
-                                                      )
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Row(
-                                                      children: List.generate(CalendarCtrl.kalender[index].length, (i4) => 
-                                                        Expanded(
-                                                          child: Center(
-                                                            child: Text(CalendarCtrl.kalender[index][i4]['value'].toString())
-                                                          )
-                                                        )
-                                                      ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: List.generate(CalendarCtrl.lsRoomType[i2]['rooms'].length, (i3) => 
+                                            Row(
+                                              children: [
+                                                Card(
+                                                  color: Colors.grey[300],
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(8),
+                                                    child: Center(
+                                                      child: Text(CalendarCtrl.lsRoomType[i2]['rooms'][i3]['no_room'].toString())
                                                     )
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Stack(
+                                                    children: [
+                                                      Row(
+                                                        children: List.generate(CalendarCtrl.kalender[index].length, (i4) => 
+                                                          Expanded(
+                                                            child: CalendarCtrl.lsRoomType[i2]['rooms'][i3]['no_room'].toString().toLowerCase() == CalendarCtrl.kalender[index][i4]['eventA']['room_id'].toString().toLowerCase()? 
+                                                            Container(
+                                                              width: double.infinity,
+                                                              color: Color(int.parse(CalendarCtrl.kalender[index][i4]['eventA']['warna'].toString().replaceAll("#", "0xff"))),
+                                                              child: Center(
+                                                                  child: Text(CalendarCtrl.kalender[index][i4]['eventA']['guest_name'].toString(),
+                                                                    overflow: TextOverflow.fade,
+                                                                  ),
+                                                                ),
+                                                            ):
+                                                            Container(
+                                                              constraints: BoxConstraints(
+                                                                maxHeight: 50
+                                                              ),
+                                                              decoration: BoxDecoration(
+                                                                border: Border.all(color: Colors.grey[300]),
+                                                              ),
+                                                              padding: EdgeInsets.all(8),
+                                                            )
+                                                          )
+                                                        ),
+                                                      ),
+                                                      /// ini diatasnya stack
+                                                      Container(
+                                                        child: Row(
+                                                          children: List.generate(CalendarCtrl.kalender[index].length, (ia1) => 
+                                                            Expanded(
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Container(
+                                                                      padding: EdgeInsets.all(8),
+                                                                      // color: Colors.yellow,
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(                                                      
+                                                                    child: Container( 
+                                                                      padding: EdgeInsets.all(8),
+                                                                      // color: Colors.red,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   )
-                                                ],
-                                              )
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                                )
+                                              ],
+                                            )
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   )
                                 ),
@@ -195,6 +272,8 @@ class PhisCalendarBooking extends StatelessWidget {
 }
 
 
+
+
 class CalendarCtrl extends PhisCtrl{
 
   static final bulanan = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
@@ -206,8 +285,8 @@ class CalendarCtrl extends PhisCtrl{
   static final lsEvent = [].obs;
   static final lsRoomType = [].obs;
 
-  static final tahun = 2021.obs;
-  static final bulan = 1.obs;
+  static final tahun = DateTime.now().year.obs;
+  static final bulan = DateTime.now().month.obs;
   static final halaman = 0.obs;
   static final kemana = 0.obs;
   
@@ -217,7 +296,7 @@ class CalendarCtrl extends PhisCtrl{
     //kalender.assignAll(Penanggalan.sebulan(tahun.value, bulan.value)['week']);
     initAssyncCalendar();
     iniAssyncRoomType();
-    //initlistEvent();
+    initlistEvent();
     
     loading.value = false;
   }
@@ -226,34 +305,54 @@ class CalendarCtrl extends PhisCtrl{
     kalender.assignAll(Penanggalan.sebulan(tahun.value, bulan.value)['week']);
   }
 
-  static iniAssyncRoomType(){
-    final rtp = FakeApi.roomType;
-    lsRoomType.assignAll(rtp['data']['data']);
+  static iniAssyncRoomType() async {
+   try {
+      Response res = await ControllerApi.to.calendarRoomType();
+      final data = res.body['data']['data'];
+      lsRoomType.assignAll(data);
+   } catch (e) {
+     Get.snackbar("info", "failed get data room type");
+   }
   }
 
-  static List tanggalRange(String checkIn, String checout) => List.generate(DateTime.parse(checout).difference(DateTime.parse(checkIn)).inDays + 1, (index) => DateTime(DateTime.parse(checkIn).year, DateTime.parse(checkIn).month, DateTime.parse(checkIn).day + (index)));
+  static List tanggalRange(String checkIn, String checout) => List.generate(DateTime.parse(checout).difference(DateTime.parse(checkIn)).inDays + 1, (index) => DateTime(DateTime.parse(checkIn).year, DateTime.parse(checkIn).month, DateTime.parse(checkIn).day + (index)).day);
 
-  static initlistEvent(){
-    //lsEvent.assignAll();
-    final List evn = FakeApi.dataEvent['data']['data'];
-    final ijc = evn.map((e) => 
+  static initlistEvent()async{
+    // Response res = await ControllerApi.to.calendarBooking();
+    // Get.dialog(Card(child: SingleChildScrollView(child: Text(res.body),),));
+
+    final data = FakeApi.dataEvent['data']['data'];
+    final ijc = data.map((e) => 
       {
         "check_in": e['checkIn'],
         "check_out": e['checkOut'],
         "index_awal": getPekan(e['checkIn']),
         "index_akhir": getPekan(e['checkOut']),
         "room_id": e['roomId'],
+        "room_name": e['room_name'],
+        "guest_name": e['guestName'],
+        "pekan": getPekan(e['checkIn']),
+        "index_pekan": getIndexPekan(e['checkIn'], getPekan(e['checkIn']), DateTime.parse(e['checkIn']).day),
         "tahun_awal": DateTime.parse(e['checkIn']).year,
         "tahun_akhir": DateTime.parse(e['checkOut']).year,
         "bulan_awal": DateTime.parse(e['checkIn']).month,
         "bulan_akhir": DateTime.parse(e['checkOut']).month,
         "tanggal_awal": DateTime.parse(e['checkIn']).day,
-        "warna": e['backgroundColor'].toString().replaceAll("#", "x0ff"),
+        "warna": e['backgroundColor'],
         "tanggal_akhir": DateTime.parse(e['checkOut']).day,
         "rage": tanggalRange(e['checkIn'], e['checkOut'])
       }
     ).toList();
 
+    final tgl = Penanggalan.sebulan(tahun.value, bulan.value);
+
+    for(var i = 0; i < ijc.length; i++){
+      if(ijc[i]['tahun_awal'].toString() == tgl['tahun'].toString() && ijc[i]['bulan_awal'].toString() == tgl['bulan'].toString()){
+        tgl['week'][ijc[i]['pekan']][ijc[i]['index_pekan']]['eventA'] = ijc[i];
+      }
+    }
+
+    kalender.assignAll(tgl['week']);
   }
 
   static getPekan(String calendar) {
@@ -262,6 +361,13 @@ class CalendarCtrl extends PhisCtrl{
     final lsMap = lsCalendar.map((e) => e.where( (e) => e["type"] != 0 && e["type"] != 2).toList().map( (e) => e['value']).toList()).toList();
     final idx = lsMap.map( (e) => e.indexOf(cld.day)).toList().indexWhere((element) => element != -1);
     return idx;
+  }
+
+  static getIndexPekan(String calendar, int idx, int tanggal){
+    final cld = DateTime.parse(calendar);
+    final ls = Penanggalan.sebulan(cld.year, cld.month)['week'];
+    final index = ls[idx].indexWhere((e) => e['value'] == tanggal);
+    return index;
   }
   
 
@@ -303,7 +409,8 @@ class Penanggalan{
 
     var date = 1;
     var bulanan = {};
-    bulanan['month'] = bulan;
+    bulanan['tahun'] = tahun;
+    bulanan['bulan'] = bulan;
     bulanan['week'] = [];
     bulanan['day'] = [];
     for(var j = 0; j < ((minggu + totalHari) / 7).ceil(); j++) {
@@ -315,20 +422,23 @@ class Penanggalan{
           if(j == 0 && i < minggu) {
             isi = {
               "type": 0,
-              "value": awal ++
+              "value": awal ++,
+              "eventA": {}
             };
           } 
           else if(totalHari >= date) {
               isi = {
                 "type": 1,
-                "value": date
+                "value": date,
+                "eventA": {}
               };
               date++;
           }
           else if(date > totalHari){
             isi = {
               "type": 0,
-              "value": akhir ++
+              "value": akhir ++,
+              "eventA": {}
             };
           }
           bulanan['day'].add(isi);
@@ -695,8 +805,8 @@ class FakeApi {
         "roomId": "107",
         "room_name": "107 ONE BEDROOM",
         "dummy": 0,
-        "checkIn": "2020-12-23",
-        "checkOut": "2020-12-24",
+        "checkIn": "2021-01-23",
+        "checkOut": "2021-01-24",
         "guestId": "G201118MZSY5",
         "guestName": "Rizki Septiana -2",
         "reservationNumber": "RES/2011/MZSY4",
@@ -954,8 +1064,8 @@ class FakeApi {
         "roomId": "105",
         "room_name": "105 ONE BEDROOM VILLA",
         "dummy": 0,
-        "checkIn": "2020-12-25",
-        "checkOut": "2020-12-26",
+        "checkIn": "2021-01-25",
+        "checkOut": "2021-01-26",
         "guestId": "G201215T350U",
         "guestName": "Pak Yuyu And Fam Booked By Pak Fendy",
         "reservationNumber": "RES/2012/ST5KC",
@@ -1131,8 +1241,8 @@ class FakeApi {
         "roomId": "103",
         "room_name": "103 ONE BEDROOM VILLA",
         "dummy": 0,
-        "checkIn": "2020-12-25",
-        "checkOut": "2020-12-26",
+        "checkIn": "2021-01-25",
+        "checkOut": "2021-01-26",
         "guestId": "G201215T5LN3",
         "guestName": "Pak Yuyu And Fam Booked By Pak Fendy",
         "reservationNumber": "RES/2012/SQSYA",
@@ -1308,8 +1418,8 @@ class FakeApi {
         "roomId": "115",
         "room_name": "111 TWO BEDROOM",
         "dummy": 0,
-        "checkIn": "2020-12-25",
-        "checkOut": "2020-12-28",
+        "checkIn": "2021-02-25",
+        "checkOut": "2021-02-28",
         "guestId": "G201125G0OYH",
         "guestName": "Shared Room",
         "reservationNumber": "RES/2012/Y0YFR",
@@ -1569,8 +1679,8 @@ class FakeApi {
         "roomId": "106",
         "room_name": "106 ONE BEDROOM",
         "dummy": 0,
-        "checkIn": "2020-12-25",
-        "checkOut": "2020-12-26",
+        "checkIn": "2021-01-25",
+        "checkOut": "2021-01-26",
         "guestId": "G201118N544Y",
         "guestName": "Anissa Maharani Halim",
         "reservationNumber": "RES/2011/N603D",
