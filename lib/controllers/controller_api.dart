@@ -52,7 +52,7 @@ class ControllerApi extends GetConnect{
 
   /// calendar booking /listBooking?start=&end=&roomType=&roomFilter=
   /// https://report-mobile.probussystem.com/api/listBooking?start=&end=&roomType=&roomFilter=
-  Future calendarBooking() async => get("$host/api/listBooking?start=&end=&roomType=&roomFilter=&outlet=${GetStorage().read('id').toString()}",headers: {"Authorization": "Bearer "+GetStorage().read("token")});
+  Future calendarBooking(String start, String end) async => get("$host/api/listBooking?start=$start&end=$end&roomType=&roomFilter=&outlet=${GetStorage().read('id').toString()}",headers: {"Authorization": "Bearer "+GetStorage().read("token")});
   // room type  => /api/roomType?outlet=
   Future calendarRoomType() async => get("$host/api/roomType?outlet=${GetStorage().read('id').toString()}",headers: {"Authorization": "Bearer "+GetStorage().read("token")});
 

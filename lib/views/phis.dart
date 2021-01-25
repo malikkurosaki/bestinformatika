@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:probus_mobile/component/calendar_booking_v3.dart';
+import 'package:probus_mobile/component/percobaan_calendar.dart';
 import 'package:probus_mobile/component/phis_by_city.dart';
 import 'package:probus_mobile/component/phis_by_country.dart';
 import 'package:probus_mobile/component/phis_forecast_occupancy.dart';
@@ -26,8 +28,20 @@ class Phis extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          FlatButton(onPressed: () => Get.toNamed("/calendar"), 
-                          child: Text("calendar")
+                          Row(
+                            children: [
+                              FlatButton(onPressed: () => Get.toNamed("/calendar"), 
+                              child: Text("calendar")
+                              ),
+                              FlatButton(
+                                onPressed: () => Get.to(PercobaanCalendar()), 
+                                child: Text("percobaan Calendar")
+                              ),
+                              FlatButton(
+                                onPressed: () => Get.to(CalendarV3()), 
+                                child: Text("calendar v3")
+                              )
+                            ],
                           ),
                           PhisReportOverview(),
                           PhisReservationOverview(),
