@@ -1,15 +1,23 @@
-
-
 import 'dart:convert';
-
 
 void main() {
   final tanggalan = DateTime(2021, 2, 10);
 
   final List ls = Percobaan.sebulan(2021, 4)['week'];
   final tanggal = 1;
-  final lsMap = ls.map((e) => e.where( (e) => e["type"] != 0 && e["type"] != 2).toList().map( (e) => e['value']).toList()).toList();
-  final idx = lsMap.map( (e) => e.indexOf(tanggal)).toList().indexWhere((element) => element != -1);
+  
+  final lsMap = ls
+      .map((e) => e
+      .where((e) => e["type"] != 0 && e["type"] != 2)
+      .toList()
+      .map((e) => e['value'])
+      .toList())
+      .toList();
+  final idx = lsMap
+      .map((e) => e.indexOf(tanggal))
+      .toList()
+      .indexWhere((element) => element != -1);
+
   final index = ls[idx].indexWhere((e) => e['value'] == tanggal);
 
   final awal = 3;
@@ -19,46 +27,64 @@ void main() {
   final List event = FakeData.response['data']['data'];
   final List roomType = FakeData.roomType['data']['data'];
 
-  final jenisKamar = roomType.map((e) => 
-  {
-    "nm_jenis": e['nm_jenis'],
-    "rooms": e['rooms'].map( (a) => 
-    {
-      "no_room": a['no_room'],
-      "room_name": a['nama_room'],
-      "event": event.where((element) => element['room_name'].toString().toLowerCase() == a['nama_room'].toString().toLowerCase()).toList().map((s) => 
-      {
-        "room_name": s['room_name'],
-        "checkIn": s['checkIn'],
-        "checkOut": s['checkOut'],
-        "guestName": s['guestName'],
-        "backgroundColor": s['backgroundColor'],
-        "range": Percobaan.getListRange(Percobaan.getTanggal(s['checkIn']), Percobaan.getTanggal(s['checkOut'])),
-        "tahun_awal": Percobaan.getTahun(s['checkIn']),
-        "tahun_akhir": Percobaan.getTahun(s['checkOut']),
-        "bulan_awal": Percobaan.getBulan(s['checkIn']),
-        "bulan_akhir": Percobaan.getBulan(s['checkOut']),
-        "tanggal_awal": Percobaan.getTanggal(s['checkIn']),
-        "tanggal_akhir": Percobaan.getTanggal(s['checkOut']),
-        "minggu_awal": Percobaan.getPekan(s['checkIn']),
-        "minggu_akhir": Percobaan.getPekan(s['checkOut'])
-      }).toList()
-    }
-  ).toList()}).toList();
+  final jenisKamar = roomType
+      .map((e) => {
+            "nm_jenis": e['nm_jenis'],
+            "rooms": e['rooms']
+                .map((a) => {
+                      "no_room": a['no_room'],
+                      "room_name": a['nama_room'],
+                      "event": event
+                          .where((element) =>
+                              element['room_name'].toString().toLowerCase() ==
+                              a['nama_room'].toString().toLowerCase())
+                          .toList()
+                          .map((s) => {
+                                "room_name": s['room_name'],
+                                "checkIn": s['checkIn'],
+                                "checkOut": s['checkOut'],
+                                "guestName": s['guestName'],
+                                "backgroundColor": s['backgroundColor'],
+                                "range": Percobaan.getListRange(
+                                    Percobaan.getTanggal(s['checkIn']),
+                                    Percobaan.getTanggal(s['checkOut'])),
+                                "tahun_awal": Percobaan.getTahun(s['checkIn']),
+                                "tahun_akhir":
+                                    Percobaan.getTahun(s['checkOut']),
+                                "bulan_awal": Percobaan.getBulan(s['checkIn']),
+                                "bulan_akhir":
+                                    Percobaan.getBulan(s['checkOut']),
+                                "tanggal_awal":
+                                    Percobaan.getTanggal(s['checkIn']),
+                                "tanggal_akhir":
+                                    Percobaan.getTanggal(s['checkOut']),
+                                "minggu_awal": Percobaan.getPekan(s['checkIn']),
+                                "minggu_akhir":
+                                    Percobaan.getPekan(s['checkOut'])
+                              })
+                          .toList()
+                    })
+                .toList()
+          })
+      .toList();
 
-  final lsEvent = Percobaan.getEvent(FakeData.roomType['data']['data'], FakeData.response['data']['data']);
+  final lsEvent = Percobaan.getEvent(
+      FakeData.roomType['data']['data'], FakeData.response['data']['data']);
   final sebulan = Percobaan.sebulan(2020, 12);
 
   final List aya = Ini.hitung("2021-01-01");
 
-  final itu = aya.fold([[]], (list, x) => list.last.length == 7? (list..add([x])) : (list..last.add(x)));
+  final itu = aya.fold(
+      [[]],
+      (list, x) =>
+          list.last.length == 7 ? (list..add([x])) : (list..last.add(x)));
   //print(JsonEncoder.withIndent(" ").convert(itu));
   final myfiled = {"IDAufgaben": "2630", "Aufgabe": "erste Aufgabe"};
   print(JsonEncoder.withIndent(" ").convert(myfiled));
 }
 
 class Ini {
-  static hitung(String kalender){
+  static hitung(String kalender) {
     final tanggalan = DateTime.parse(kalender);
     final tahun = tanggalan.year;
     final bulan = tanggalan.month;
@@ -68,29 +94,18 @@ class Ini {
     var tanggal = 1;
     final hasil = [];
 
-    for(var i = 0; i < ((pekan + totalHari) / 7).ceil(); i++){
+    for (var i = 0; i < ((pekan + totalHari) / 7).ceil(); i++) {
       var tmp = {};
       var awal = tanggalan.subtract(Duration(days: pekan)).day;
       var akhir = 1;
-      for( var x = 0; x < 7; x++){
-        if(x == 0 && i < pekan){
-          tmp = {
-            "type": 0,
-            "value": awal ++
-          };
-        }
-        else if(totalHari >= tanggal){
-          tmp = {
-            "type": 1,
-            "value": tanggal
-          };
-          tanggal ++;
-        }
-        else if(tanggal > totalHari){
-          tmp = {
-            "type": 2,
-            "value": akhir ++
-          };
+      for (var x = 0; x < 7; x++) {
+        if (x == 0 && i < pekan) {
+          tmp = {"type": 0, "value": awal++};
+        } else if (totalHari >= tanggal) {
+          tmp = {"type": 1, "value": tanggal};
+          tanggal++;
+        } else if (tanggal > totalHari) {
+          tmp = {"type": 2, "value": akhir++};
         }
         hasil.add(tmp);
       }
@@ -99,21 +114,25 @@ class Ini {
   }
 }
 
-class Percobaan{
-
+class Percobaan {
   static final setahun = List.generate(12, (index) => sebulan(2021, index + 1));
 
-  static getListRange(int awal, int akhir){
-    return List.generate((akhir + 1) - awal, (index) => awal + index).map((e) => 
-    {
-      "jenis": e == awal?0: e != awal && e != akhir?1:2,
-      "value": e
-    }).toList();
+  static getListRange(int awal, int akhir) {
+    return List.generate((akhir + 1) - awal, (index) => awal + index)
+        .map((e) => {
+              "jenis": e == awal
+                  ? 0
+                  : e != awal && e != akhir
+                      ? 1
+                      : 2,
+              "value": e
+            })
+        .toList();
   }
 
   // mendapatkan tahun
   static getTahun(String calendar) => DateTime.parse(calendar).year;
-  // mendapatkakn bulan 
+  // mendapatkakn bulan
   static getBulan(String calendar) => DateTime.parse(calendar).month;
   // mendapatkan tanggal bulan target
   static getTanggal(String calendar) => DateTime.parse(calendar).day;
@@ -121,57 +140,78 @@ class Percobaan{
   static getPekan(String calendar) {
     final cld = DateTime.parse(calendar);
     final lsCalendar = sebulan(cld.year, cld.month)['week'];
-    final lsMap = lsCalendar.map((e) => e.where( (e) => e["type"] != 0 && e["type"] != 2).toList().map( (e) => e['value']).toList()).toList();
-    final idx = lsMap.map( (e) => e.indexOf(cld.day)).toList().indexWhere((element) => element != -1);
+    final lsMap = lsCalendar
+        .map((e) => e
+            .where((e) => e["type"] != 0 && e["type"] != 2)
+            .toList()
+            .map((e) => e['value'])
+            .toList())
+        .toList();
+    final idx = lsMap
+        .map((e) => e.indexOf(cld.day))
+        .toList()
+        .indexWhere((element) => element != -1);
     return idx;
   }
 
-  static getTotalHari(String calendar) => DateTime(DateTime.parse(calendar).year, DateTime.parse(calendar).month + 1, 0).day;
+  static getTotalHari(String calendar) => DateTime(
+          DateTime.parse(calendar).year, DateTime.parse(calendar).month + 1, 0)
+      .day;
 
-  static getTotalPekan(String calendar){
+  static getTotalPekan(String calendar) {
     final cal = DateTime.parse(calendar);
     final pkn = cal.weekday;
     return ((pkn + getTotalHari(calendar)) / 7).ceil();
   }
 
-  static getEvent(List roomType, List event){
-    final eventKamar = roomType.map((e) => 
-    {
-      "nm_jenis": e['nm_jenis'],
-      "rooms": e['rooms'].map( (a) => 
-        {
-          "no_room": a['no_room'],
-          "room_name": a['nama_room'],
-          "events": event.where((element) => element['room_name'].toString().toLowerCase() == a['nama_room'].toString().toLowerCase()).toList().map((s) => 
-          {
-            "room_name": s['room_name'],
-            "checkIn": s['checkIn'],
-            "checkOut": s['checkOut'],
-            "guestName": s['guestName'],
-            "backgroundColor": s['backgroundColor'],
-            "range": getListRange(getTanggal(s['checkIn']), getTanggal(s['checkOut'])),
-            "tahun_awal": getTahun(s['checkIn']),
-            "tahun_akhir": getTahun(s['checkOut']),
-            "bulan_awal": getBulan(s['checkIn']),
-            "bulan_akhir": getBulan(s['checkOut']),
-            "tanggal_awal": getTanggal(s['checkIn']),
-            "tanggal_akhir": getTanggal(s['checkOut']),
-            "minggu_awal": getPekan(s['checkIn']),
-            "minggu_akhir": getPekan(s['checkOut']),
-            "total_hari_awal": getTotalHari(s['checkIn']),
-            "total_hari_akhir": getTotalHari(s['checkOut']),
-            "total_pekan_awal": getTotalPekan(s['checkIn']),
-            "total_pekan_akhir": getTotalPekan(s['checkOut']),
-          }).toList()
-        }
-      ).toList()
-    }).toList();
-    
+  static getEvent(List roomType, List event) {
+    final eventKamar = roomType
+        .map((e) => {
+              "nm_jenis": e['nm_jenis'],
+              "rooms": e['rooms']
+                  .map((a) => {
+                        "no_room": a['no_room'],
+                        "room_name": a['nama_room'],
+                        "events": event
+                            .where((element) =>
+                                element['room_name'].toString().toLowerCase() ==
+                                a['nama_room'].toString().toLowerCase())
+                            .toList()
+                            .map((s) => {
+                                  "room_name": s['room_name'],
+                                  "checkIn": s['checkIn'],
+                                  "checkOut": s['checkOut'],
+                                  "guestName": s['guestName'],
+                                  "backgroundColor": s['backgroundColor'],
+                                  "range": getListRange(
+                                      getTanggal(s['checkIn']),
+                                      getTanggal(s['checkOut'])),
+                                  "tahun_awal": getTahun(s['checkIn']),
+                                  "tahun_akhir": getTahun(s['checkOut']),
+                                  "bulan_awal": getBulan(s['checkIn']),
+                                  "bulan_akhir": getBulan(s['checkOut']),
+                                  "tanggal_awal": getTanggal(s['checkIn']),
+                                  "tanggal_akhir": getTanggal(s['checkOut']),
+                                  "minggu_awal": getPekan(s['checkIn']),
+                                  "minggu_akhir": getPekan(s['checkOut']),
+                                  "total_hari_awal": getTotalHari(s['checkIn']),
+                                  "total_hari_akhir":
+                                      getTotalHari(s['checkOut']),
+                                  "total_pekan_awal":
+                                      getTotalPekan(s['checkIn']),
+                                  "total_pekan_akhir":
+                                      getTotalPekan(s['checkOut']),
+                                })
+                            .toList()
+                      })
+                  .toList()
+            })
+        .toList();
+
     return eventKamar;
   }
 
-  static Map sebulan(int tahun, int bulan){
-
+  static Map sebulan(int tahun, int bulan) {
     final tanggal = DateTime(tahun, bulan);
     final minggu = tanggal.weekday;
     final totalHari = DateTime(tahun, bulan + 1, 0).day;
@@ -181,48 +221,34 @@ class Percobaan{
     bulanan['month'] = bulan;
     bulanan['week'] = [];
     bulanan['day'] = [];
-    for(var j = 0; j < ((minggu + totalHari) / 7).ceil(); j++) {
+    for (var j = 0; j < ((minggu + totalHari) / 7).ceil(); j++) {
       bulanan['week'].add([]);
-      int awal = tanggal.subtract(Duration(days: tanggal.weekday )).day;
+      int awal = tanggal.subtract(Duration(days: tanggal.weekday)).day;
       int akhir = 1;
-      for(var i = 0; i < 7 ; i++) {
-          var isi = {};
-          if(j == 0 && i < minggu) {
-            isi = {
-              "type": 0,
-              "value": awal ++
-            };
-          } 
-          else if(totalHari >= date) {
-              isi = {
-                "type": 1,
-                "value": date
-              };
-              date++;
-          }
-          else if(date > totalHari){
-            isi = {
-              "type": 0,
-              "value": akhir ++
-            };
-          }
-          bulanan['day'].add(isi);
-          bulanan['week'][j].add(isi);
+      for (var i = 0; i < 7; i++) {
+        var isi = {};
+        if (j == 0 && i < minggu) {
+          isi = {"type": 0, "value": awal++};
+        } else if (totalHari >= date) {
+          isi = {"type": 1, "value": date};
+          date++;
+        } else if (date > totalHari) {
+          isi = {"type": 0, "value": akhir++};
+        }
+        bulanan['day'].add(isi);
+        bulanan['week'][j].add(isi);
       }
     }
     return bulanan;
   }
 }
 
-
-class FakeData{
+class FakeData {
   static final Map roomType = {
     "response": 200,
     "message": "Room Type List",
     "status": true,
-    "param": {
-      "outlet": "1"
-    },
+    "param": {"outlet": "1"},
     "data": {
       "data": [
         {
@@ -594,13 +620,15 @@ class FakeData{
             "nm_cus": "BOOKING.COM (HOTEL COLLECT)",
             "kd_agen": "XX",
             "nama_agen": "",
-            "alamat": "                                                                                                    ",
+            "alamat":
+                "                                                                                                    ",
             "tgl_aktif": "0000-00-00",
             "coa_piut": "",
             "telpon": "",
             "hp": "",
             "fax": "                    ",
-            "ket": "                                                                                                    ",
+            "ket":
+                "                                                                                                    ",
             "coa_ar": "          ",
             "nama": "",
             "email": "",
@@ -994,10 +1022,7 @@ class FakeData{
           ],
           "depositDetail": [],
           "res": "ST5KC",
-          "reservasiDatePrice": {
-            "2020-12-25": "0.00",
-            "2020-12-26": "0.00"
-          }
+          "reservasiDatePrice": {"2020-12-25": "0.00", "2020-12-26": "0.00"}
         },
         {
           "id": "RES/2012/SQSYA",
@@ -1171,10 +1196,7 @@ class FakeData{
           ],
           "depositDetail": [],
           "res": "SQSYA",
-          "reservasiDatePrice": {
-            "2020-12-25": "0.00",
-            "2020-12-26": "0.00"
-          }
+          "reservasiDatePrice": {"2020-12-25": "0.00", "2020-12-26": "0.00"}
         },
         {
           "id": "RES/2012/Y0YFR",
@@ -1468,13 +1490,15 @@ class FakeData{
             "nm_cus": "AGODA (AGENT COLLECT)",
             "kd_agen": "XX",
             "nama_agen": "",
-            "alamat": "                                                                                                    ",
+            "alamat":
+                "                                                                                                    ",
             "tgl_aktif": "0000-00-00",
             "coa_piut": "",
             "telpon": "",
             "hp": "",
             "fax": "                    ",
-            "ket": "                                                                                                    ",
+            "ket":
+                "                                                                                                    ",
             "coa_ar": "          ",
             "nama": "",
             "email": "",

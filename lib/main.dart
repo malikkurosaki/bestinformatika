@@ -19,6 +19,7 @@ import 'package:probus_mobile/controllers/controller_report_overview.dart';
 import 'package:probus_mobile/controllers/controller_reservation_overview.dart';
 import 'package:probus_mobile/controllers/controller_by_country.dart';
 import 'package:probus_mobile/controllers/controller_top_10_room_production.dart';
+import 'package:probus_mobile/controllers/log_ctrl.dart';
 import 'package:probus_mobile/controllers/phis_ctrl.dart';
 import 'package:probus_mobile/controllers/presto_ctrl.dart';
 import 'package:probus_mobile/views/home.dart';
@@ -32,6 +33,7 @@ import 'controllers/splash_screen.dart';
 
 void main()async{
   await GetStorage.init();
+  Get.put(LogCtrl());
   runApp(MainApp());
 }
 
