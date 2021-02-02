@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:probus_mobile/component/calendar_booking_v3.dart';
+import 'package:probus_mobile/component/calendar_v5.dart';
 import 'package:probus_mobile/component/percobaan.dart';
 import 'package:probus_mobile/component/phis_by_city.dart';
 import 'package:probus_mobile/component/phis_by_country.dart';
@@ -43,6 +44,10 @@ class Phis extends StatelessWidget {
                               FlatButton(
                                 onPressed: () => Get.to(CalendarV4()),
                                 child: Text("percobaan")
+                              ),
+                              FlatButton(
+                                onPressed: () => Get.to(CalendarV5()),
+                                child: Text("calendar v5")
                               )
                             ],
                           ),
