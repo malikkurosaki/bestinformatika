@@ -7,6 +7,7 @@ class PhisReservationOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -15,7 +16,6 @@ class PhisReservationOverview extends StatelessWidget {
             child: Text("Reservation Overview",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold
               ),
             ),
           ),
@@ -87,34 +87,32 @@ class ReservationOverView extends StatelessWidget {
 
   Widget reservationItem(String name, String value){
     return Expanded(
-      child: Card(
-        color: Colors.cyan[700],
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8),
-                child: Text(name,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold
-                  ),
-                )
-              ),
-              Container(
-                alignment: Alignment.center,
-                width: double.infinity,
-                color: Colors.grey[200],
-                padding: EdgeInsets.all(8),
-                child: Text(value,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold
-                  ),
+      child: Container(
+        margin: EdgeInsets.all(4),
+        color: Colors.cyan[900],
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(4),
+              child: Text(name,
+                style: TextStyle(
+                  color: Colors.white,
                 ),
               )
-            ],
-          ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              color: Colors.grey[200],
+              padding: EdgeInsets.all(8),
+              child: Text(value,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+            )
+          ],
         ),
       )
     );

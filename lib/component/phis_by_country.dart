@@ -38,6 +38,7 @@ class DetailByCountry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,54 +47,50 @@ class DetailByCountry extends StatelessWidget {
             child: Text("Top 10 Room By Country",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold
+
               ),
             )
           ),
           GridView.count(
-            crossAxisCount: 3,
+            crossAxisCount: 4,
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: [
               for(var i = 0 ; i < byCountry.length; i++)
-              Card(
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Tooltip(
-                        message: byCountry[i]['country'],
-                        child: Card(
-                          color: Colors.orange,
-                          child: Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(8),
-                            child: Text(byCountry[i]['country'],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            )
+              Container(
+                margin: EdgeInsets.all(4),
+                color: Colors.grey[200],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Tooltip(
+                      message: byCountry[i]['country'],
+                      child: Container(
+                        color: Colors.cyan[900],
+                        width: double.infinity,
+                        padding: EdgeInsets.all(4),
+                        child: Text(byCountry[i]['country'],
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.white
                           ),
+                        )
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: Text(byCountry[i]['value'].toString(),
+                              style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 42,
+                            ),
+                          )
                         ),
                       ),
-                      Expanded(
-                        child: Center(
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(byCountry[i]['value'].toString(),
-                                style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 42,
-                                color: Colors.orange
-                              ),
-                            )
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               )
             ],

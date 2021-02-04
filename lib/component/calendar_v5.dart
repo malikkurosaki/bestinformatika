@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
@@ -20,7 +21,18 @@ class CalendarV5 extends StatelessWidget {
             initState: (state) => CldV5.init(),
             autoRemove: true,
             builder: (controller) => CldV5.loadingInit.value?
-            Text("loading ..."):
+            SizedBox.expand(
+              child: Container(
+                color: Colors.orange,
+                child: Center(
+                  child: Text("Calendar Booking ...",
+                    style: TextStyle(
+                      fontSize: 18
+                    ),
+                  ),
+                ),
+              ),
+            ):
             Stack(
               children: [
                 Column(
@@ -143,9 +155,6 @@ class CalendarV5 extends StatelessWidget {
                                               },
                                               child: ListView(
                                                 controller: CldV5.scrollController.value,
-                                                addAutomaticKeepAlives: true,
-                                                shrinkWrap: true,
-                                                physics: ScrollPhysics(),
                                                 children: [
                                                   for(final lsRoom in CldV5.lsRoomType)
                                                   Column(
@@ -234,6 +243,7 @@ class CalendarV5 extends StatelessWidget {
                                                                                     padding: EdgeInsets.all(4),
                                                                                     width: booking.durasi * (Get.width / 8),
                                                                                     child: Text(booking.guestName.toString(),
+                                                                                      overflow: TextOverflow.clip,
                                                                                       style: TextStyle(
                                                                                         color: Colors.white,
                                                                                         backgroundColor: Colors.black26
@@ -381,76 +391,76 @@ class CldV5 extends PhisCtrl{
 
   static init()async{
     loadingInit.value = true;
-      getListCalendar();
-      getRoomType();
-      Future.delayed(Duration(seconds: 2),(){
-        getListBooking();
-      });
+      final kal = await compute(getListCalendar, 0);
+      lsCalendar.assignAll(kal);
+
+      await getRoomType();
     loadingInit.value = false;
+
+    Future.delayed(Duration(seconds: 2),()async{
+      loadingBooking.value = true;
+      final Response res = await ControllerApi.to.calendarBooking("$tahun-01-01", "$tahun-01-31");
+      final List data = res.body['data']['data'];
+      final lb = await compute(getListBooking, data);
+      
+      lsBooking.assignAll(lb);
+      loadingBooking.value = false;
+    });
+    
   }
 
   static getRoomType()async{
     loadingRoomType.value = true;
-
     if(GetStorage().hasData("roomType")){
       lsRoomType.assignAll(GetStorage().read("roomType"));
       loadingRoomType.value = false;
     }
 
     final Response res = await ControllerApi.to.calendarRoomType();
-    try {
-      final data = res.body['data']['data'];
-      lsRoomType.assignAll(data);
-    } catch (e) {
-      print(e);
-      Get.snackbar("info", e);
-    }
+    final data = res.body['data']['data'];
+    lsRoomType.assignAll(data);
     loadingRoomType.value = false;
   }
 
-  static getListBooking()async{
-    loadingBooking.value = true;
-    final Response res = await ControllerApi.to.calendarBooking("$tahun-01-01", "$tahun-01-31");
-    try {
-      final List data = res.body['data']['data'];
-      final compress = data.map((e) => 
-        {
-          "roomId": e['roomId'],
-          "checkIn": e['checkIn'],
-          "checkOut": e['checkOut'],
-          "backgroundColor": e['backgroundColor'],
-          "guestName": e['guestName'],
-          "weekAwal": Calendar.indexWeek(e['checkIn']),
-          "weekAkhir": Calendar.indexWeek(e['checkOut']),
-          "tanggalAwal": DateTime.parse(e['checkIn']).day,
-          "tanggalAkhir": DateTime.parse(e['checkOut']).day,
-          "bulanAwal": DateTime.parse(e['checkIn']).month,
-          "bulanAkhir": DateTime.parse(e['checkOut']).month,
-          "tahunAwal": DateTime.parse(e['checkIn']).year,
-          "tahunAkhir": DateTime.parse(e['checkOut']).year,
-          "durasi": DateTimeRange(start: DateTime.parse(e['checkIn']), end: DateTime.parse(e['checkOut'])).duration.inDays + 1,
-          "range": List.generate(DateTimeRange(start: DateTime.parse(e['checkIn']), end: DateTime.parse(e['checkOut'])).duration.inDays + 1, (index) => 
-            {
-              "tanggal": DateTime.parse(e['checkIn']).day + (index),
-              "hari": DateTime(DateTime.parse(e['checkIn']).year, DateTime.parse(e['checkIn']).month, DateTime.parse(e['checkIn']).day + (index + 1)).weekday,
-            }
-          )
-        }
-      ).toList();
-      List<ModelBooking> booking = compress.map((e) => ModelBooking.fromJson(e)).toList();
-      lsBooking.assignAll(booking);
-
-    } catch (e) {
-      print(e);
-      Get.snackbar("info", e.toString());
-    }
-    loadingBooking.value = false;
+  static getListBooking(List data)async{
+    
+    final compress = data.map((e) => 
+      {
+        "roomId": e['roomId'],
+        "checkIn": e['checkIn'],
+        "checkOut": e['checkOut'],
+        "backgroundColor": e['backgroundColor'],
+        "guestName": e['guestName'],
+        "nationality": e['nationality'],
+        "roomStatus": e['roomStatus'],
+        "bookingSource": e['bookingSource'],
+        "pax": e['pax'],
+        "reservationNumber": e['reservationNumber'],
+        "breakfast": e['breakfast'],
+        "weekAwal": Calendar.indexWeek(e['checkIn']),
+        "weekAkhir": Calendar.indexWeek(e['checkOut']),
+        "tanggalAwal": DateTime.parse(e['checkIn']).day,
+        "tanggalAkhir": DateTime.parse(e['checkOut']).day,
+        "bulanAwal": DateTime.parse(e['checkIn']).month,
+        "bulanAkhir": DateTime.parse(e['checkOut']).month,
+        "tahunAwal": DateTime.parse(e['checkIn']).year,
+        "tahunAkhir": DateTime.parse(e['checkOut']).year,
+        "durasi": DateTimeRange(start: DateTime.parse(e['checkIn']), end: DateTime.parse(e['checkOut'])).duration.inDays + 1,
+        "range": List.generate(DateTimeRange(start: DateTime.parse(e['checkIn']), end: DateTime.parse(e['checkOut'])).duration.inDays + 1, (index) => 
+          {
+            "tanggal": DateTime.parse(e['checkIn']).day + (index),
+            "hari": DateTime(DateTime.parse(e['checkIn']).year, DateTime.parse(e['checkIn']).month, DateTime.parse(e['checkIn']).day + (index + 1)).weekday,
+          }
+        )
+      }
+    ).toList();
+    List<ModelBooking> booking = compress.map((e) => ModelBooking.fromJson(e)).toList();
+    return booking;
   }
 
-  static getListCalendar(){
+  static Future getListCalendar(int i)async{
     final List<Calendar> ls = List.generate(12, (index) => Calendar(DateTime(tahun, index + 1, 1)));
-    lsCalendar.assignAll(ls);
-    loadingInit.value = false;
+    return ls;
   }
 
   static clickBooking(ModelBooking booking){

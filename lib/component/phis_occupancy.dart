@@ -25,12 +25,12 @@ class PhisOccupancy extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    color: Colors.cyan.withOpacity(0.5),
+                    color: Colors.black54,
                     padding: EdgeInsets.all(8),
                     alignment: Alignment.centerRight,
                     child: Text(GetStorage().read('outlet')['name'],
                       style: TextStyle(
-                        color: Colors.cyan[200],
+                        color: Colors.orange[700],
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
                       ),
@@ -47,7 +47,7 @@ class PhisOccupancy extends StatelessWidget {
                               Card(
                                 shadowColor: Colors.white,
                                 elevation: 10,
-                                color: Colors.cyan[900].withOpacity(0.5),
+                                color: Colors.white54,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                                 child: Container(
                                   height: 70,
@@ -57,7 +57,6 @@ class PhisOccupancy extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white
                                     ),
                                   )
                                 ),
@@ -73,7 +72,7 @@ class PhisOccupancy extends StatelessWidget {
                           ),
                           Card(
                             child: Container(
-                              padding: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(4),
                               child: Text("Yesterday")
                             ),
                           )
@@ -85,7 +84,7 @@ class PhisOccupancy extends StatelessWidget {
                             alignment: Alignment.bottomRight,
                             children: [
                               CircleAvatar(
-                                backgroundColor: Colors.white.withOpacity(0.5),
+                                backgroundColor: Colors.white54,
                                 radius: 70,
                                 child: Container(
                                   width: 150,
@@ -95,7 +94,7 @@ class PhisOccupancy extends StatelessWidget {
                                       style: TextStyle(
                                       fontSize: 73,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.cyan,
+                                      color: Colors.orange[700],
                                     ),
                                   )
                                 ),
@@ -104,7 +103,8 @@ class PhisOccupancy extends StatelessWidget {
                                 backgroundColor: Colors.white,
                                 child: Text("%",
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black
                                   ),
                                 ),
                               ),
@@ -112,10 +112,9 @@ class PhisOccupancy extends StatelessWidget {
                           ),
                           Card(
                             child: Container(
-                              padding: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(4),
                               child: Text("Today",
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
                                   fontSize: 24
                                 ),
                               )
@@ -131,7 +130,7 @@ class PhisOccupancy extends StatelessWidget {
                               Card(
                                 elevation: 10,
                                 shadowColor: Colors.white,
-                                color: Colors.cyan[800].withOpacity(0.5),
+                                color: Colors.white54,
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                                 child: Container(
                                   width: 70,
@@ -140,8 +139,7 @@ class PhisOccupancy extends StatelessWidget {
                                   child: Text(ControllerOccupancy.to.occupancy['tomorrow'].toString(),
                                       style: TextStyle(
                                       fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white
+                                      fontWeight: FontWeight.bold
                                     ),
                                   )
                                 ),
@@ -157,7 +155,7 @@ class PhisOccupancy extends StatelessWidget {
                           ),
                           Card(
                             child: Container(
-                              padding: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(4),
                               child: Text("Tomorrow")
                             ),
                           )

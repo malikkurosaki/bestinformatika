@@ -71,18 +71,25 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return Container(
-      child: Scaffold(
-        body: Center(
-          child: Text(
-            "PROBUS \nSYSTEM",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold
-            ),
+    return Scaffold(
+      backgroundColor: Colors.cyan[900],
+      body: Center(
+        child: Text(
+          "PROBUS \nSYSTEM",
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Colors.orange,
+            shadows: [
+              Shadow(
+                blurRadius: 2,
+                offset: Offset(2, 2),
+                color: Colors.black
+              )
+            ]
           ),
         ),
-      )
+      ),
     );
   }
 }

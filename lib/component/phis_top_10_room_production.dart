@@ -37,6 +37,7 @@ class DetailTop10 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,7 +46,6 @@ class DetailTop10 extends StatelessWidget {
             child: Text("Top 10 Room Production",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold
               ),
             )
           ),
@@ -55,40 +55,39 @@ class DetailTop10 extends StatelessWidget {
             shrinkWrap: true,
             children: [
               for(var i = 0; i < toproom.length; i++)
-              Card(
-                child: Container(
-                  child: Column(
-                    children: [
-                      Tooltip(
-                        message: toproom[i]['nm_agen'].toString().toLowerCase(),
-                        child: Card(
-                          color: Colors.blue[500],
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            width: double.infinity,
-                            child: Text(toproom[i]['nm_agen'].toString().toLowerCase(),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(),
-                            )
+              Container(
+                margin: EdgeInsets.all(4),
+                color: Colors.grey[200],
+                child: Column(
+                  children: [
+                    Tooltip(
+                      message: toproom[i]['nm_agen'].toString().toLowerCase(),
+                      child: Container(
+                        color: Colors.cyan[900],
+                        padding: EdgeInsets.all(4),
+                        width: double.infinity,
+                        child: Text(toproom[i]['nm_agen'].toString().toLowerCase(),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.white
                           ),
+                        )
+                      ),
+                    ),
+                    Flexible(
+                      child: Center(
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: Text(toproom[i]['value'].toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                            ),
+                          )
                         ),
                       ),
-                      Flexible(
-                        child: Center(
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            child: Text(toproom[i]['value'].toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                color: Colors.red
-                              ),
-                            )
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               )
             ],

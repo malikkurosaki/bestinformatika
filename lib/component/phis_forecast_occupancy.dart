@@ -36,6 +36,7 @@ class DetailForecast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,8 +44,7 @@ class DetailForecast extends StatelessWidget {
             padding: EdgeInsets.all(8),
             child: Text("Forecast Occupancy",
               style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold
+                fontSize: 24
               ),
             )
           ),
@@ -54,38 +54,34 @@ class DetailForecast extends StatelessWidget {
             crossAxisCount: 4,
             children: [
               for(var i = 0; i< forecast.length; i++)
-              Card(
-                child: Container(
-                  child: Column(
-                    children: [
-                      Card(
-                        color: Colors.cyan,
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(8),
-                          child: Text(ControllerForecastOccupancy.to.namaBulan[int.parse(forecast[i]['month'])-1].toString(),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        )
-                      ),
-                      Flexible(
-                        child: Center(
-                          child: Text(forecast[i]['occupancy'].toString(),
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.cyan
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          )
+              Container(
+                color: Colors.grey[200],
+                margin: EdgeInsets.all(4),
+                child: Column(
+                  children: [
+                    Container(
+                      color: Colors.cyan[900],
+                      width: double.infinity,
+                      padding: EdgeInsets.all(4),
+                      child: Text(ControllerForecastOccupancy.to.namaBulan[int.parse(forecast[i]['month'])-1].toString(),
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ),
+                    Flexible(
+                      child: Center(
+                        child: Text(forecast[i]['occupancy'].toString(),
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         )
                       )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               )
             ],

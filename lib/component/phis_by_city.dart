@@ -36,6 +36,7 @@ class DetailByCity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,48 +45,43 @@ class DetailByCity extends StatelessWidget {
             child: Text("Top 10 Room By City",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold
               ),
             )
           ),
           GridView.count(
-            crossAxisCount: 3,
+            crossAxisCount: 4,
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: [
               for(var i = 0; i< byCity.length; i++)
-              Card(
-                child: Container(
-                  child: Column(
-                    children: [
-                      Card(
-                        color: Colors.green,
+              Container(
+                color: Colors.grey[200],
+                margin: EdgeInsets.all(4),
+                child: Column(
+                  children: [
+                    Container(
+                      color: Colors.cyan[900],
+                      width: double.infinity,
+                      padding: EdgeInsets.all(4),
+                      child: Text(byCity[i]['city'],
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      )
+                    ),
+                    Flexible(
+                      child: Center(
                         child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(8),
-                          child: Text(byCity[i]['city'],
+                          child: Text(byCity[i]['value'].toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.white
+                              fontSize: 32,
                             ),
                           )
                         ),
-                      ),
-                      Flexible(
-                        child: Center(
-                          child: Container(
-                            child: Text(byCity[i]['value'].toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: Colors.green
-                              ),
-                            )
-                          ),
-                        )
                       )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               )
             ],

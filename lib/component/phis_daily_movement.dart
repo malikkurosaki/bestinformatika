@@ -10,6 +10,7 @@ class PhisDailymovement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -18,7 +19,6 @@ class PhisDailymovement extends StatelessWidget {
             child: Text("Daily Movement",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold
               ),
             ),
           ),
@@ -28,7 +28,6 @@ class PhisDailymovement extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 child: Wrap(
-
                   children: [
                     detailDailyMovement("Room Salles",ControllerDailyMovement.to.movement['roomSales']),
                     detailDailyMovement("Room Unsold",ControllerDailyMovement.to.movement['roomUnSold']),
@@ -68,145 +67,119 @@ class PhisDailymovement extends StatelessWidget {
 
   Widget detailDailyMovement(String judul, Map data){
     return Container(
-      child: Card(
-        color: Colors.cyan[100],
-        child: Container(
-          width: Get.width/2.1,
-          height: 200,
-          child: Column(
-            children: [
-              Card(
-                color: Colors.cyan[300],
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(8),
-                  child: Text(judul,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+      color: Colors.grey[200],
+      margin: EdgeInsets.all(4),
+      width: Get.width/2.1,
+      height: 150,
+      child: Column(
+        children: [
+          Container(            
+            color: Colors.cyan[900],
+            width: double.infinity,
+            padding: EdgeInsets.all(4),
+            child: Text(judul,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white
+              ),
+            ),
+          ),
+          Flexible(
+            child: Column(
+              children: [
+                Flexible(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(4),
+                          width: double.infinity,
+                          child: Text("Today"),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          child: Text(NumberFormat('#,###','in').format(data['today']),
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-              Flexible(
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Center(
-                        child: Card(
-                          child: Container(
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Card(
-                                  color: Colors.cyan[100],
-                                  child: Container(
-                                    width: double.infinity,
-                                    child: Text("Today",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(NumberFormat('#,###','in').format(data['today']),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.cyan[600]
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
+                Flexible(
+                  child: Center(
+                    child: Container(
+                      child: Container(
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              width: double.infinity,
+                              child: Text("Yesterday"),
                             ),
-                          ),
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              child: Text(NumberFormat('#,###','in').format(data['yesterday']),
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Flexible(
-                      child: Center(
-                        child: Card(
-                          child: Container(
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Card(
-                                  color: Colors.cyan[100],
-                                  child: Container(
-                                    width: double.infinity,
-                                    child: Text("Yesterday",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(NumberFormat('#,###','in').format(data['yesterday']),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.cyan[800]
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 )
-              ),
-              
-            ],
+              ],
+            )
           ),
-        ),
+          
+        ],
       ),
     );
   }
 
+
+  /// induk yang bawah 
+  /// guest , reservation , inhouse
   Widget detailDailyMovement2(String judul, List<Widget> widget ){
     return Container(
-      child: Card(
-        color: Colors.cyan[100],
-        child: Container(
-          width: Get.width/2.1,
-          height: 200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: widget,
-                )
-              ),
-              Card(
-                color: Colors.cyan,
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(8),
-                  child: Text(judul,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              )
-            ],
+      color: Colors.grey[200],
+      margin: EdgeInsets.all(4),
+      width: Get.width/2.1,
+      height: 150,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: widget,
+            )
           ),
-        ),
+          Container(
+            color: Colors.cyan[900],
+            width: double.infinity,
+            padding: EdgeInsets.all(4),
+            child: Text(judul,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -217,9 +190,12 @@ class PhisDailymovement extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Today",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold
+              Container(
+                padding: EdgeInsets.all(4),
+                child: Text("Today",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),
                 ),
               ),
               Flexible(
@@ -228,41 +204,37 @@ class PhisDailymovement extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Expanded(
-                        child: Card(
-                          child: Column(
-                            children: [
-                              Text("Adult"),
-                              Flexible(
-                                child: Center(
-                                  child: Text(data['todayAdult'].toString(),
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  )
+                        child: Column(
+                          children: [
+                            Text("Adult"),
+                            Flexible(
+                              child: Center(
+                                child: Text(data['todayAdult'].toString(),
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold
+                                  ),
                                 )
-                              ),
-                            ],
-                          ),
+                              )
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
-                        child: Card(
-                          child: Column(
-                            children: [
-                              Text("Child"),
-                              Flexible(
-                                child: Center(
-                                  child: Text(data['todayChild'].toString(),
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  )
+                        child: Column(
+                          children: [
+                            Text("Child"),
+                            Flexible(
+                              child: Center(
+                                child: Text(data['todayChild'].toString(),
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold
+                                  ),
                                 )
-                              ),
-                            ],
-                          ),
+                              )
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -276,6 +248,7 @@ class PhisDailymovement extends StatelessWidget {
           child: Column(
             children: [
               Container(
+                padding: EdgeInsets.all(4),
                 width: double.infinity,
                 child: Text("Yesterday",
                   style: TextStyle(
@@ -288,41 +261,37 @@ class PhisDailymovement extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Expanded(
-                      child: Card(
-                        child: Column(
-                          children: [
-                            Text("Adult"),
-                            Flexible(
-                              child: Center(
-                                child: Text(data['yesterdayAdult'].toString(),
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold
-                                  ),
+                      child: Column(
+                        children: [
+                          Text("Adult"),
+                          Flexible(
+                            child: Center(
+                              child: Text(data['yesterdayAdult'].toString(),
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     Expanded(
-                      child: Card(
-                        child: Column(
-                          children: [
-                            Text("Child"),
-                            Flexible(
-                              child: Center(
-                                child: Text(data['yesterdayChild'].toString(),
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                )
+                      child: Column(
+                        children: [
+                          Text("Child"),
+                          Flexible(
+                            child: Center(
+                              child: Text(data['yesterdayChild'].toString(),
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold
+                                ),
                               )
-                            ),
-                          ],
-                        ),
+                            )
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -331,7 +300,6 @@ class PhisDailymovement extends StatelessWidget {
             ],
           ),
         )
-        
       ];
   }
 
@@ -341,55 +309,49 @@ class PhisDailymovement extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Card(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.cyan,
-                      child: Container(
-                        width: double.infinity,
-                        child: Text("Booking")
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    width: double.infinity,
+                    child: Text("Booking")
+                  ),
+                  Flexible(
+                    child: Center(
+                      child: Text(data['Booking'].toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       )
-                    ),
-                    Flexible(
-                      child: Center(
-                        child: Text(data['Booking'].toString(),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      )
-                    ),
-                  ],
-                ),
+                    )
+                  ),
+                ],
               )
             ),
             Expanded(
-              child: Card(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.cyan,
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    width: double.infinity,
+                    child: Text("Confirmed")
+                  ),
+                  Flexible(
+                    child: Center(
                       child: Container(
-                        width: double.infinity,
-                        child: Text("Confirmed")
-                      )
-                    ),
-                    Flexible(
-                      child: Center(
                         child: Text(data['Confirmed'].toString(),
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold
                           ),
                           overflow: TextOverflow.ellipsis,
-                        )
+                        ),
                       )
-                    ),
-                  ],
-                ),
+                    )
+                  ),
+                ],
               )
             )
           ],
@@ -399,54 +361,46 @@ class PhisDailymovement extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Card(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.cyan,
-                      child: Container(
-                        width: double.infinity,
-                        child: Text("Canceled")
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    width: double.infinity,
+                    child: Text("Canceled")
+                  ),
+                  Flexible(
+                    child: Center(
+                      child: Text(data['Canceled'].toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       )
-                    ),
-                    Flexible(
-                      child: Center(
-                        child: Text(data['Canceled'].toString(),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      )
-                    ),
-                  ],
-                ),
+                    )
+                  ),
+                ],
               )
             ),
             Expanded(
-              child: Card(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.cyan,
-                      child: Container(
-                        width: double.infinity,
-                        child: Text("No Show")
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    width: double.infinity,
+                    child: Text("No Show")
+                  ),
+                  Flexible(
+                    child: Center(
+                      child: Text(data['No Show'].toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
                       )
-                    ),
-                    Flexible(
-                      child: Center(
-                        child: Text(data['No Show'].toString(),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                          ),
-                        )
-                      )
-                    ),
-                  ],
-                ),
+                    )
+                  ),
+                ],
               )
             )
           ],
@@ -461,53 +415,45 @@ class PhisDailymovement extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Card(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.cyan,
-                      child: Container(
-                        width: double.infinity,
-                        child: Text("House Used",)
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    width: double.infinity,
+                    child: Text("House Used",)
+                  ),
+                  Flexible(
+                    child: Center(
+                      child: Text(data['House Used'].toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
                       )
-                    ),
-                    Flexible(
-                      child: Center(
-                        child: Text(data['House Used'].toString(),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                          ),
-                        )
-                      )
-                    ),
-                  ],
-                ),
+                    )
+                  ),
+                ],
               )
             ),
             Expanded(
-              child: Card(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.cyan,
-                      child: Container(
-                        width: double.infinity,
-                        child: Text("Compliment")
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    width: double.infinity,
+                    child: Text("Compliment")
+                  ),
+                  Flexible(
+                    child: Center(
+                      child: Text(data['Compliment'].toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
                       )
-                    ),
-                    Flexible(
-                      child: Center(
-                        child: Text(data['Compliment'].toString(),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                          ),
-                        )
-                      )
-                    ),
-                  ],
-                ),
+                    )
+                  ),
+                ],
               )
             )
           ],
@@ -517,53 +463,45 @@ class PhisDailymovement extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Card(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.cyan,
-                      child: Container(
-                        width: double.infinity,
-                        child: Text("Pay Room")
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    width: double.infinity,
+                    child: Text("Pay Room")
+                  ),
+                  Flexible(
+                    child: Center(
+                      child: Text(data['Pay Room'].toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
                       )
-                    ),
-                    Flexible(
-                      child: Center(
-                        child: Text(data['Pay Room'].toString(),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                          ),
-                        )
-                      )
-                    ),
-                  ],
-                ),
+                    )
+                  ),
+                ],
               )
             ),
             Expanded(
-              child: Card(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.cyan,
-                      child: Container(
-                        width: double.infinity,
-                        child: Text("Out Order")
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    width: double.infinity,
+                    child: Text("Out Order")
+                  ),
+                  Flexible(
+                    child: Center(
+                      child: Text(data['Out Of Order'].toString(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
                       )
-                    ),
-                    Flexible(
-                      child: Center(
-                        child: Text(data['Out Of Order'].toString(),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold
-                          ),
-                        )
-                      )
-                    ),
-                  ],
-                ),
+                    )
+                  ),
+                ],
               )
             )
           ],

@@ -13,10 +13,9 @@ class LogoutButton extends StatelessWidget {
           builder: (_) => RaisedButton(onPressed: ControllerLogin.to.sudahLogout.value? () => ControllerLogin.to.logout():null,
             elevation: 8,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.red[900],
+            color: Colors.orange,
             child: Text(ControllerLogin.to.sudahLogout.value?"LOGOUT":"loading ...",
               style: TextStyle(
-                color: Colors.white,
                 fontWeight: FontWeight.bold
               ),
             ),
@@ -26,7 +25,7 @@ class LogoutButton extends StatelessWidget {
           elevation: 10,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
           child: IconButton(icon: Icon(Icons.edit,
-            color: Colors.green,
+            color: Colors.cyan[900],
           ), onPressed: () => ControllerHome.to.keProfile(),),
         )
       ],

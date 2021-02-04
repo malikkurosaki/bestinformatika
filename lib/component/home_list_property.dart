@@ -7,7 +7,6 @@ class ListProperty extends StatelessWidget {
   Widget build(BuildContext context) {
     final lsCom = ControllerHome.to.getListCompeny();
     return Container(
-      color: Colors.teal[50],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,39 +44,44 @@ class ListProperty extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(vertical: 8),
+                            width: double.infinity,
+                            color: Colors.grey[300],
+                            padding: EdgeInsets.symmetric(vertical: 4),
                             child: Text(lsCom[i]['properties'][x]['type'],
                               style: TextStyle(
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey
                               ),
                             ),
                           ),
                           Wrap(
                             children: [
                               for(var y = 0; y < lsCom[i]['properties'][x]['outlets'].length; y++)
-                              Card(
-                                child: Container(
-                                  padding: EdgeInsets.all(8),
-                                  child: InkWell(
-                                    onTap: () => ControllerHome.to.kePhisPage(lsCom[i]['properties'][x]['outlets'][y], lsCom[i]['properties'][x]['type']),
-                                    child: Column(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor: Colors.blue[300],
-                                          child: Icon(lsCom[i]['properties'][x]['type'] == "Hotel"?Icons.home:Icons.restaurant,
-                                            color: Colors.white,
-                                          ),
+                              Column(
+                                children: [
+                                  Card(
+                                    color: Colors.cyan[900],
+                                    child: Container(
+                                      padding: EdgeInsets.all(16),
+                                      child: InkWell(
+                                        onTap: () => ControllerHome.to.kePhisPage(lsCom[i]['properties'][x]['outlets'][y], lsCom[i]['properties'][x]['type']),
+                                        child: Column(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundColor: Colors.orange,
+                                              child: Icon(lsCom[i]['properties'][x]['type'] == "Hotel"?Icons.home:Icons.restaurant,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.all(8),
-                                          child: Text(lsCom[i]['properties'][x]['outlets'][y]['name'])
-                                        )
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  Container(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text(lsCom[i]['properties'][x]['outlets'][y]['name'])
+                                  )
+                                ],
                               ),
                             ],
                           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:probus_mobile/component/calendar_booking_v3.dart';
 import 'package:probus_mobile/component/calendar_v5.dart';
+import 'package:probus_mobile/component/calendar_v6.dart';
 import 'package:probus_mobile/component/percobaan.dart';
 import 'package:probus_mobile/component/phis_by_city.dart';
 import 'package:probus_mobile/component/phis_by_country.dart';
@@ -37,17 +38,28 @@ class Phis extends StatelessWidget {
                               //   onPressed: () => Get.to(PercobaanCalendar()), 
                               //   child: Text("percobaan Calendar")
                               // ),
-                              FlatButton(
-                                onPressed: () => Get.to(CalendarV3()), 
-                                child: Text("calendar v3")
-                              ),
-                              FlatButton(
-                                onPressed: () => Get.to(CalendarV4()),
-                                child: Text("percobaan")
-                              ),
+                              // FlatButton(
+                              //   onPressed: () => Get.to(CalendarV3()), 
+                              //   child: Text("calendar v3")
+                              // ),
+                              // FlatButton(
+                              //   onPressed: () => Get.to(CalendarV4()),
+                              //   child: Text("percobaan")
+                              // ),
                               FlatButton(
                                 onPressed: () => Get.to(CalendarV5()),
-                                child: Text("calendar v5")
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_today
+                                    ),
+                                    Text("  Calendar Booking"),
+                                  ],
+                                )
+                              ),
+                              FlatButton(
+                                onPressed: () => Get.to(CalendarV6()), 
+                                child: Text("calendar v6")
                               )
                             ],
                           ),
@@ -65,6 +77,7 @@ class Phis extends StatelessWidget {
                 ],
               ),
                BackButton(
+                color: Colors.white,
                 onPressed: () => Get.back(),
               ),
             ],

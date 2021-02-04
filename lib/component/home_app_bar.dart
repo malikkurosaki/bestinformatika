@@ -9,7 +9,7 @@ class HomeAppBar extends StatelessWidget {
     return Container(
       height: 200,
       width: double.infinity,
-      color: Colors.blue[300],
+      color: Colors.cyan[900],
       child: Row(
         children: [
         Card(
@@ -19,10 +19,11 @@ class HomeAppBar extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(8),
             child: CircleAvatar(
-              backgroundColor: Colors.blue[700],
+              backgroundColor: Colors.orange,
               maxRadius: 40,
               child: Icon(Icons.account_circle_outlined,
                 size: 80,
+                color: Colors.black,
               ),
             ),
           ),
